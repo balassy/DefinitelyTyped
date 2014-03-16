@@ -1,6 +1,6 @@
 // Type definitions for d3JS
 // Project: http://d3js.org/
-// Definitions by: TypeScript samples
+// Definitions by: Boris Yankov <https://github.com/borisyankov>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
 declare module D3 {
@@ -88,42 +88,78 @@ declare module D3 {
         * @param arr Array to search
         * @param map Accsessor function
         */
-        min<T, U>(arr: T[], map?: (v: T) => U): U;
+        min<T, U>(arr: T[], map: (v: T) => U): U;
+        /**
+        * Find the minimum value in an array
+        *
+        * @param arr Array to search
+        */
+        min<T>(arr: T[]): T;
         /**
         * Find the maximum value in an array
         *
         * @param arr Array to search
         * @param map Accsessor function
         */
-        max<T, U>(arr: T[], map?: (v: T) => U): U;
+        max<T, U>(arr: T[], map: (v: T) => U): U;
+        /**
+        * Find the maximum value in an array
+        *
+        * @param arr Array to search
+        */
+        max<T>(arr: T[]): T;
         /**
         * Find the minimum and maximum value in an array
         *
         * @param arr Array to search
         * @param map Accsessor function
         */
-        extent<T, U>(arr: T[], map?: (v: T) => U): U[];
+        extent<T, U>(arr: T[], map: (v: T) => U): U[];
+        /**
+        * Find the minimum and maximum value in an array
+        *
+        * @param arr Array to search
+        */
+        extent<T>(arr: T[]): T[];
         /**
         * Compute the sum of an array of numbers
         *
         * @param arr Array to search
         * @param map Accsessor function
         */
-        sum<T>(arr: T[], map?: (v: T) => number): number;
+        sum<T>(arr: T[], map: (v: T) => number): number;
+        /**
+        * Compute the sum of an array of numbers
+        *
+        * @param arr Array to search
+        */
+        sum(arr: number[]): number;
         /**
         * Compute the arithmetic mean of an array of numbers
         *
         * @param arr Array to search
         * @param map Accsessor function
         */
-        mean<T>(arr: T[], map?: (v: T) => number): number;
+        mean<T>(arr: T[], map: (v: T) => number): number;
+        /**
+        * Compute the arithmetic mean of an array of numbers
+        *
+        * @param arr Array to search
+        */
+        mean(arr: number[]): number;
         /**
         * Compute the median of an array of numbers (the 0.5-quantile).
         *
         * @param arr Array to search
         * @param map Accsessor function
         */
-        median<T>(arr: T[], map?: (v: T) => number): number;
+        median<T>(arr: T[], map: (v: T) => number): number;
+        /**
+        * Compute the median of an array of numbers (the 0.5-quantile).
+        *
+        * @param arr Array to search
+        */
+        median(arr: number[]): number;
         /**
         * Compute a quantile for a sorted array of numbers.
         *
@@ -135,7 +171,7 @@ declare module D3 {
         * Locate the insertion point for x in array to maintain sorted order
         *
         * @param arr Array to search
-        * @param x Value to serch for insertion point
+        * @param x Value to search for insertion point
         * @param low Minimum value of array subset
         * @param hihg Maximum value of array subset
         */
@@ -776,6 +812,8 @@ declare module D3 {
         select: (selector: string) => Selection;
         empty: () => boolean;
         node: () => Element;
+        call: (callback: (selection: EnterSelection) => void) => EnterSelection;
+        size: () => number;
     }
 
     export interface UpdateSelection extends Selection {
@@ -811,7 +849,7 @@ declare module D3 {
 
     export interface Set{
         has(value: any): boolean;
-        Add(value: any): any;
+        add(value: any): any;
         remove(value: any): boolean;
         values(): Array<any>;
         forEach(func: (value: any) => void ): void;
@@ -1112,17 +1150,17 @@ declare module D3 {
             };
             startAngle: {
                 (): number;
-                (angle: number): D3.Svg.Arc;
-                (angle: () => number): D3.Svg.Arc;
-                (angle: (d : any) => number): D3.Svg.Arc;
-                (angle: (d : any, i: number) => number): D3.Svg.Arc;
+                (angle: number): PieLayout;
+                (angle: () => number): PieLayout;
+                (angle: (d : any) => number): PieLayout;
+                (angle: (d : any, i: number) => number): PieLayout;
             };
             endAngle: {
                 (): number;
-                (angle: number): D3.Svg.Arc;
-                (angle: () => number): D3.Svg.Arc;
-                (angle: (d : any) => number): D3.Svg.Arc;
-                (angle: (d : any, i: number) => number): D3.Svg.Arc;
+                (angle: number): PieLayout;
+                (angle: () => number): PieLayout;
+                (angle: (d : any) => number): PieLayout
+                (angle: (d : any, i: number) => number): PieLayout;
             };
         }
 
@@ -3175,10 +3213,11 @@ declare module D3 {
     // Geometry
     export module Geom {
         export interface Geom {
+            voronoi<T>(): Voronoi<T>;
             /**
             * compute the Voronoi diagram for the specified points.
             */
-            voronoi: Voronoi
+            voronoi(vertices: Array<Vertice>): Array<Polygon>;
             /**
             * compute the Delaunay triangulation for the specified points.
             */
@@ -3259,15 +3298,82 @@ declare module D3 {
             y: number;
         }
 
-        export interface Voronoi {
-            (vertices?: Array<Vertice>): Array<Polygon>;
+        export interface Voronoi<T> {
+            /**
+            * Compute the Voronoi diagram for the specified data.
+            */
+            (data: Array<T>): Array<Polygon>;
+            /**
+            * Compute the graph links for the Voronoi diagram for the specified data.
+            */
+            links(data: Array<T>): Array<Layout.GraphLink>;
+            /**
+            * Compute the triangles for the Voronoi diagram for the specified data.
+            */
+            triangles(data: Array<T>): Array<Array<number>>;
             x: {
-                (): (d: any) => any;
-                (accesor: (d: any) => any): any;
+                /**
+                * Get the x-coordinate accessor.
+                */
+                (): (data: T, index ?: number) => number;
+
+                /**
+                * Set the x-coordinate accessor.
+                *
+                * @param accessor The new accessor function
+                */
+                (accessor: (data: T, index: number) => number): Voronoi<T>;
+
+                /**
+                * Set the x-coordinate to a constant.
+                *
+                * @param constant The new constant value.
+                */
+                (constant: number): Voronoi<T>;
             }
             y: {
-                (): (d: any) => any;
-                (accesor: (d: any) => any): any;
+                /**
+                * Get the y-coordinate accessor.
+                */
+                (): (data: T, index ?: number) => number;
+
+                /**
+                * Set the y-coordinate accessor.
+                *
+                * @param accessor The new accessor function
+                */
+                (accessor: (data: T, index: number) => number): Voronoi<T>;
+
+                /**
+                * Set the y-coordinate to a constant.
+                *
+                * @param constant The new constant value.
+                */
+                (constant: number): Voronoi<T>;   
+            }
+            clipExtent: {
+                /**
+                * Get the clip extent.
+                */
+                (): Array<Array<number>>;
+                /**
+                * Set the clip extent.
+                *
+                * @param extent The new clip extent.
+                */
+                (extent: Array<Array<number>>): Voronoi<T>;
+            }
+            size: {
+                /**
+                * Get the size.
+                */
+                (): Array<number>;
+                /**
+                * Set the size, equivalent to a clip extent starting from (0,0).
+                *
+                * @param size The new size.
+                */
+                (size: Array<number>): Voronoi<T>;
             }
         }
 

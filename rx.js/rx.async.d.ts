@@ -1,10 +1,10 @@
-///<reference path="rx.d.ts" />
-
 // Type definitions for RxJS-Async package 2.2.11
 // Project: http://rx.codeplex.com/
 // Definitions by: zoetrope <https://github.com/zoetrope>
-// Revision by: Igor Oleinikov <https://github.com/Igorbek>
+// Definitions by: Igor Oleinikov <https://github.com/Igorbek>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
+
+///<reference path="rx.d.ts" />
 
 declare module Rx {
     interface ObservableStatic {
@@ -104,9 +104,9 @@ declare module Rx {
 	 * Promise A+
 	 */
 	export interface IPromise<T> {
-		then<R>(onFulfilled?: (value: T) => IPromise<R>, onRejected?: (reason: any) => IPromise<R>): IPromise<R>;
-		then<R>(onFulfilled?: (value: T) => IPromise<R>, onRejected?: (reason: any) => R): IPromise<R>;
-		then<R>(onFulfilled?: (value: T) => R, onRejected?: (reason: any) => IPromise<R>): IPromise<R>;
+		then<R>(onFulfilled: (value: T) => IPromise<R>, onRejected: (reason: any) => IPromise<R>): IPromise<R>;
+		then<R>(onFulfilled: (value: T) => IPromise<R>, onRejected?: (reason: any) => R): IPromise<R>;
+		then<R>(onFulfilled: (value: T) => R, onRejected: (reason: any) => IPromise<R>): IPromise<R>;
 		then<R>(onFulfilled?: (value: T) => R, onRejected?: (reason: any) => R): IPromise<R>;
 	}
 }

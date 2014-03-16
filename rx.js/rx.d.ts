@@ -1,7 +1,7 @@
-﻿// Type definitions for RxJS
+﻿// Type definitions for RxJS v2.2.13
 // Project: http://rx.codeplex.com/
 // Definitions by: gsino <http://www.codeplex.com/site/users/view/gsino>
-// Revision by: Igor Oleinikov <https://github.com/Igorbek>
+// Definitions by: Igor Oleinikov <https://github.com/Igorbek>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
 declare module Rx {
@@ -167,7 +167,6 @@ declare module Rx {
 	// Current Thread IScheduler
 	interface ICurrentThreadScheduler extends IScheduler {
 		scheduleRequired(): boolean;
-		ensureTrampoline(action: () =>IDisposable): IDisposable;
 	}
 
 	// Notifications
@@ -353,4 +352,8 @@ declare module Rx {
 	}
 
 	export var AsyncSubject: AsyncSubjectStatic;
+}
+
+declare module "rx" {
+    export = Rx
 }
